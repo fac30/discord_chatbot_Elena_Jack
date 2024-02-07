@@ -6,22 +6,22 @@ This project aims to create a Discord bot using Node.js that integrates with the
 ## Checklist
 
 - **Project Setup with Libraries**
-  - [✔] Create a new Node.js project.
-  - [✔] Install `discord.js` and `openai` libraries using npm.
-  - [✔] Set up `discord.js` and `openai` by requiring them in your project.
+  - [x] Create a new Node.js project.
+  - [x] Install `discord.js` and `openai` libraries using npm.
+  - [x] Set up `discord.js` and `openai` by requiring them in your project.
   
 - **Secure Configuration**
-  - [ ] Create a `.env` file to store API keys.
-  - [✔] Use `require('dotenv/config')` to load API keys from the `.env` file.
-  - [✔] Add `.env` to `.gitignore` to ensure sensitive information is not committed to the repository.
+  - [x] Create a `.env` file to store API keys.
+  - [x] Use `require('dotenv/config')` to load API keys from the `.env` file.
+  - [x] Add `.env` to `.gitignore` to ensure sensitive information is not committed to the repository.
 
 - **Bot Initialization**
-  - [✔] Initialize the Discord bot with `new Discord.Client()`.
-  - [✔] Log in to Discord using `client.login` with your Discord token.
+  - [x] Initialize the Discord bot with `new Discord.Client()`.
+  - [x] Log in to Discord using `client.login` with your Discord token.
 
 - **Message Handling**
-  - [✔] Set up a message event listener with `client.on('messageCreate', callback)`.
-  - [✔] Process incoming messages and respond with a "hello" message.
+  - [x] Set up a message event listener with `client.on('messageCreate', callback)`.
+  - [x] Process incoming messages and respond with a "hello" message.
 
 - **Optimization**
   - [ ] Implement efficient event handling.

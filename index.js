@@ -6,7 +6,7 @@
 
 // Step 1: Project Setup with Libraries
 // Require necessary libraries
-const Discord = require('discord.js');
+const {Client, IntentsBitField} = require('discord.js');
 const {ChatCompletionClient} = require('openai');
 const dotenv = require('dotenv');
 
@@ -14,9 +14,18 @@ const dotenv = require('dotenv');
 // Load environment variables from .env file
 dotenv.config();
 
-// Step 3: Bot Initialization
+// intents - these enable the bot to recieve specific events, as such are required to allow the bot to perform certain actions
+const botIntents = new IntentsBitField();
+botIntents.add(
+    IntentsBitField.Flags.Guilds,
+    IntentsBitField.Flags.GuildMessages,
+    IntentsBitField.Flags.GuildMessageTyping,
+    IntentsBitField.Flags.GuildEmojisAndStickers,
+    IntentsBitField.Flags.MessageContent,
+);
+
 // Initialize Discord bot
-const client = new Discord.Client();
+const client = new Client({intents: botIntents});
 
 // Log in to Discord using the token from .env
 client.login(process.env.DISCORD_TOKEN)
@@ -30,11 +39,14 @@ client.login(process.env.DISCORD_TOKEN)
 // Step 4: Message Handling
 // Set up message event listener
 client.on('messageCreate', (message) => {
+  console.log('message get');
   // Ignore messages from other bots or non-text channels
-  if (message.author.bot || !message.content || message.channel.type !== 'GUILD_TEXT') return;
+
+  // if (message.author.bot || !message.content || message.channel.type !== 'GUILD_TEXT') return;
+  // this line is stopping the ability to reply, unsure why I cannot find the documentation for this so please fix
 
   // Process incoming messages and respond with a "hello" message
-  if (message.content === '!hello') {
+  if (message.content == 'hello') {
     message.channel.send('Hello!');
   }
 });
