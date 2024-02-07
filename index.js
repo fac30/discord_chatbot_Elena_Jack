@@ -40,8 +40,6 @@ client.login(process.env.DISCORD_TOKEN)
 // Set up message event listener
 client.on('messageCreate', (message) => {
   console.log('message get');
-  console.log(message.content);
-  console.log(message.content == 'hello');
   // Ignore messages from other bots or non-text channels
 
   // if (message.author.bot || !message.content || message.channel.type !== 'GUILD_TEXT') return;
@@ -49,7 +47,6 @@ client.on('messageCreate', (message) => {
 
   // Process incoming messages and respond with a "hello" message
   if (message.content == 'hello') {
-    console.log('reply sent');
-    return message.channel.send('Hello!');
+    message.channel.send('Hello!');
   }
 });
