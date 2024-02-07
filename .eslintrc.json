@@ -9,7 +9,7 @@
         "sourceType": "module"
     },
     "rules": {
-        "require-jsdoc":"off",
-        "max-len":"off"
+        "require-jsdoc": "off",
+        "max-len": "off"
     }
 }
