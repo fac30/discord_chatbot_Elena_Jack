@@ -59,7 +59,7 @@ async function getOpenAIResponse(prompt) {
     // Retrieve the API key from environment variables
     const apiKey = process.env.OPENAI_API_KEY;
     // Define the URL for the OpenAI API
-    const apiUrl = 'http.. api api api';
+    const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
     // Define the request body with the prompt and other parameters
     const requestBody = {
