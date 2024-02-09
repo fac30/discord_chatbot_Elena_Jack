@@ -6,8 +6,8 @@
 
 // Step 1: Project Setup with Libraries
 // Require necessary libraries
-const { Client, IntentsBitField } = require('discord.js');
-const { ChatCompletionClient } = require('openai');
+const {Client, IntentsBitField} = require('discord.js');
+const {ChatCompletionClient} = require('openai');
 const dotenv = require('dotenv');
 
 // Step 2: Secure Configuration
@@ -17,24 +17,24 @@ dotenv.config();
 // intents - these enable the bot to recieve specific events, as such are required to allow the bot to perform certain actions
 const botIntents = new IntentsBitField();
 botIntents.add(
-  IntentsBitField.Flags.Guilds,
-  IntentsBitField.Flags.GuildMessages,
-  IntentsBitField.Flags.GuildMessageTyping,
-  IntentsBitField.Flags.GuildEmojisAndStickers,
-  IntentsBitField.Flags.MessageContent,
+    IntentsBitField.Flags.Guilds,
+    IntentsBitField.Flags.GuildMessages,
+    IntentsBitField.Flags.GuildMessageTyping,
+    IntentsBitField.Flags.GuildEmojisAndStickers,
+    IntentsBitField.Flags.MessageContent,
 );
 
 // Initialize Discord bot
-const client = new Client({ intents: botIntents });
+const client = new Client({intents: botIntents});
 
 // Log in to Discord using the token from .env
 client.login(process.env.DISCORD_TOKEN)
-  .then(() => {
-    console.log('Bot is logged in!');
-  })
-  .catch((error) => {
-    console.error('Error logging in:', error);
-  });
+    .then(() => {
+      console.log('Bot is logged in!');
+    })
+    .catch((error) => {
+      console.error('Error logging in:', error);
+    });
 
 // Step 4: Message Handling
 // Set up message event listener
