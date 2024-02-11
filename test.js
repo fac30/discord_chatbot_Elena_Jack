@@ -55,11 +55,11 @@ client.on('messageCreate', async (message) => {
         {'role': 'user', 'content': message.content},
       ],
     });
+    console.log(response.choices[0]);
+    message.channel.send(response.choices[0].message.content);
   } catch (error) {
     console.error('There was an error while processing the OpenAI response:', error);
     await message.channel.send('There was an error in processing your message.');
   }
-
-  console.log(response.choices[0]);
 });
 
