@@ -52,13 +52,18 @@ client.login(process.env.DISCORD_TOKEN)
       console.error('Error logging in:', error);
     });
 
+// this function handles the api request
+async function apiFetch(message) {
+  return await openai.chat.completions.create({
+    model: 'gpt-3.5-turbo',
+    messages: [
+      {'role': 'system', 'content': 'you are a helpful assistant.'},
+      {'role': 'user', 'content': message.content},
+    ],
+  });
+}
 
-// async function apiFetch(input) {
-//     return
-// }
-
-
-// message event listener for incoming messages
+// message event listner
 client.on('messageCreate', async (message) => {
   if (message.author.bot || !message.content) return;
   console.log('message get');
@@ -85,16 +90,8 @@ client.on('messageCreate', async (message) => {
     }
   } else {
     // Handle regular messages (processing with OpenAI)
-
     try {
-      //  Sends request to OpenAI API for response generation
-      const response = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          {'role': 'system', 'content': 'you are a helpful assistant.'},
-          {'role': 'user', 'content': message.content},
-        ],
-      });
+      const response = await apiFetch(message);
 
       // this shows in console the json object of reply from the api
       console.log(response.choices[0]);
