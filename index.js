@@ -1,17 +1,9 @@
-// In this code:
-// Step 1: We require the necessary libraries discord.js and openai using require().
-// Step 2: We load environment variables from the .env file using dotenv.config().
-// Step 3: We initialize the Discord bot with new Discord.Client(), and log in to Discord using the token from the .env file.
-// Step 4: We set up a message event listener using client.on('messageCreate', callback) to handle incoming messages. If the message content is !hello, the bot responds with "Hello!".
-
-// Step 1: Project Setup with Libraries
-// Require necessary libraries
+// libraries
 const {Client, IntentsBitField} = require('discord.js');
-const {ChatCompletionClient} = require('openai');
+const {OpenAI} = require('openai');
 const dotenv = require('dotenv');
 
-// Step 2: Secure Configuration
-// Load environment variables from .env file
+// This enables acces to api keys for both open AI and the Discord bot
 dotenv.config();
 
 // intents - these enable the bot to recieve specific events, as such are required to allow the bot to perform certain actions
@@ -24,8 +16,13 @@ botIntents.add(
     IntentsBitField.Flags.MessageContent,
 );
 
-// Initialize Discord bot
+// Initializes Discord bot
 const client = new Client({intents: botIntents});
+
+// Open AI confuguraion
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 // Log in to Discord using the token from .env
 client.login(process.env.DISCORD_TOKEN)
@@ -40,7 +37,6 @@ client.login(process.env.DISCORD_TOKEN)
 // Set up message event listener
 client.on('messageCreate', (message) => {
   console.log('message get');
-
   // Ignore messages from other bots or non-text channels
   if (message.author.bot || !message.content) return;
 
@@ -48,11 +44,12 @@ client.on('messageCreate', (message) => {
   // Process incoming messages and respond with a "hello" message
   if (message.content == 'hello') {
     message.channel.send('Hello!');
+  } else {
+
   }
 });
 
 
-// Step 5: Optimisation
 // Async function to fetch a response from the OpenAI API.
 async function getOpenAIResponse(prompt) {
   try {
