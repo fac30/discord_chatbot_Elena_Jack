@@ -55,7 +55,11 @@ client.on('messageCreate', async (message) => {
         {'role': 'user', 'content': message.content},
       ],
     });
+
+    // this shows in console the json object of reply from the api
     console.log(response.choices[0]);
+
+    // this makes the bot reply in discord
     message.channel.send(response.choices[0].message.content);
   } catch (error) {
     console.error('There was an error while processing the OpenAI response:', error);
