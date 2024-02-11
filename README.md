@@ -27,13 +27,13 @@ This project aims to create a Discord bot using Node.js that integrates with the
   - [ ] Implement efficient event handling.
 
 - **OpenAI Chat Integration and Response Generation**
-  - [ ] Integrate OpenAI into the bot.
-  - [ ] Use `openai.chat.completions.create()` with your API key to generate responses.
+  - [x] Integrate OpenAI into the bot.
+  - [x] Use `openai.chat.completions.create()` with your API key to generate responses.
   - [ ] Pass conversation history and other necessary parameters to receive context-aware chat completions.
 
 - **Response Management**
-  - [ ] Manage OpenAI responses returned by `openai.chat.completions.create()`.
-  - [ ] Send the response back to the Discord channel.
+  - [x] Manage OpenAI responses returned by `openai.chat.completions.create()`.
+  - [x] Send the response back to the Discord channel.
 
 - **Command Processing**
   - [ ] Process commands directed at the bot using string matching or a command prefix.
