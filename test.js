@@ -33,19 +33,14 @@ client.login(process.env.DISCORD_TOKEN)
       console.error('Error logging in:', error);
     });
 
-// Step 4: Message Handling
 // Set up message event listener
 client.on('messageCreate', (message) => {
   console.log('message get');
   // Ignore messages from other bots or non-text channels
   if (message.author.bot || !message.content) return;
 
-
-  // Process incoming messages and respond with a "hello" message
   if (message.content == 'hello') {
     message.channel.send('Hello!');
-  } else {
-
   }
 });
 
