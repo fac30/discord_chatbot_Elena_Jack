@@ -15,6 +15,7 @@ botIntents.add(
     IntentsBitField.Flags.GuildMessageTyping,
     IntentsBitField.Flags.GuildEmojisAndStickers,
     IntentsBitField.Flags.MessageContent,
+    IntentsBitField.Flags.GuildMembers,
 );
 
 // Initializes Discord bot with defined intents
