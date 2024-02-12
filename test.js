@@ -2,6 +2,7 @@
 const { Client, IntentsBitField, Collection } = require('discord.js');
 const { OpenAI } = require('openai');
 const dotenv = require('dotenv');
+const fs = require('fs');
 
 // This enables access to api keys for both open AI and the Discord bot
 dotenv.config();
