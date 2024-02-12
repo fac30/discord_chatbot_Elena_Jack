@@ -34,6 +34,7 @@ client.login(process.env.DISCORD_TOKEN)
     });
 
 // Step 4: Message Handling
+
 // Set up message event listener
 client.on('messageCreate', (message) => {
   console.log('message get');

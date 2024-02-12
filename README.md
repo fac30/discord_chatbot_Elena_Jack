@@ -36,8 +36,8 @@ This project aims to create a Discord bot using Node.js that integrates with the
   - [x] Send the response back to the Discord channel.
 
 - **Command Processing**
-  - [ ] Process commands directed at the bot using string matching or a command prefix.
-  - [ ] Distinguish between general messages and commands meant for the bot.
+  - [x] Process commands directed at the bot using string matching or a command prefix.
+  - [x] Distinguish between general messages and commands meant for the bot.
 
 - **Error Handling**
   - [ ] Implement error handling using `.catch` or `try...catch` within `fetch` or `async` functions.
