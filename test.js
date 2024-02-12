@@ -1,6 +1,6 @@
 // libraries
-const { Client, IntentsBitField, Collection } = require('discord.js');
-const { OpenAI } = require('openai');
+const {Client, IntentsBitField, Collection} = require('discord.js');
+const {OpenAI} = require('openai');
 const dotenv = require('dotenv');
 const fs = require('fs');
 
@@ -10,15 +10,15 @@ dotenv.config();
 // intents - these enable the bot to recieve specific events, as such are required to allow the bot to perform certain actions
 const botIntents = new IntentsBitField();
 botIntents.add(
-  IntentsBitField.Flags.Guilds,
-  IntentsBitField.Flags.GuildMessages,
-  IntentsBitField.Flags.GuildMessageTyping,
-  IntentsBitField.Flags.GuildEmojisAndStickers,
-  IntentsBitField.Flags.MessageContent,
+    IntentsBitField.Flags.Guilds,
+    IntentsBitField.Flags.GuildMessages,
+    IntentsBitField.Flags.GuildMessageTyping,
+    IntentsBitField.Flags.GuildEmojisAndStickers,
+    IntentsBitField.Flags.MessageContent,
 );
 
 // Initializes Discord bot with defined intents
-const client = new Client({ intents: botIntents });
+const client = new Client({intents: botIntents});
 
 //  Initialize OpenAI with API key
 const openai = new OpenAI({
@@ -33,7 +33,7 @@ const commandPrefix = '!';
 client.commands = new Collection();
 
 // Read command files from the commands folder
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
 
 // Load each command file and add it to the client.commands collection
 for (const file of commandFiles) {
@@ -44,12 +44,12 @@ for (const file of commandFiles) {
 
 // Log in to Discord using the token from .env
 client.login(process.env.DISCORD_TOKEN)
-  .then(() => {
-    console.log('Bot is logged in!');
-  })
-  .catch((error) => {
-    console.error('Error logging in:', error);
-  });
+    .then(() => {
+      console.log('Bot is logged in!');
+    })
+    .catch((error) => {
+      console.error('Error logging in:', error);
+    });
 
 
 // async function apiFetch(input) {
@@ -86,12 +86,12 @@ client.on('messageCreate', async (message) => {
     // Handle regular messages (processing with OpenAI)
 
     try {
-      //  Sends request to OpenAI API for response generation  
+      //  Sends request to OpenAI API for response generation
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages: [
-          { 'role': 'system', 'content': 'you are a helpful assistant.' },
-          { 'role': 'user', 'content': message.content },
+          {'role': 'system', 'content': 'you are a helpful assistant.'},
+          {'role': 'user', 'content': message.content},
         ],
       });
 
@@ -101,12 +101,13 @@ client.on('messageCreate', async (message) => {
       // console.log(response.choices[0].message.content);
 
 
-      // this makes the bot reply in discord 
-      // DID YOU delete the first 'await' on purpose ? why? 
+      // this makes the bot reply in discord
+      // DID YOU delete the first 'await' on purpose ? why?
       await message.channel.send(response.choices[0].message.content);
     } catch (error) {
       console.error('There was an error while processing the OpenAI response:', error);
       await message.channel.send('There was an error in processing your message.');
     }
-  });
+  }
+});
 
