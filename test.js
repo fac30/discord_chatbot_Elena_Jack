@@ -42,16 +42,30 @@ for (const file of commandFiles) {
   client.commands.set(command.data.name, command);
 }
 
+// Define function to log in the bot
+function loginBot() {
+  return new Promise((resolve, reject) => {
+    // Log in to Discord using the token from .env
+    client.login(process.env.DISCORD_TOKEN)
+      .then(() => {
+        console.log('Bot is logged in!');
+        resolve();
+      })
+      .catch((error) => {
+        console.error('Error logging in:', error);
+        reject(error); // Reject the promise with the error if login failsnode --trace-warnings
+      });
+  });
+}
 
-// Log in to Discord using the token from .env
-client.login(process.env.DISCORD_TOKEN)
+// Call the login function
+loginBot()
   .then(() => {
-    console.log('Bot is logged in!');
+    console.log('Bot is ready to receive commands!');
   })
   .catch((error) => {
-    console.error('Error logging in:', error);
+    console.error('Error while logging in:', error);
   });
-
 
 // message event listener for incoming messages
 client.on('messageCreate', async (message) => {
@@ -95,7 +109,6 @@ client.on('messageCreate', async (message) => {
       // this shows in console the json object of reply from the api
       console.log(response.choices[0]);
 
-
       // this makes the bot reply in discord
       await message.channel.send(response.choices[0].message.content);
     } catch (error) {
@@ -104,4 +117,3 @@ client.on('messageCreate', async (message) => {
     }
   }
 });
-
