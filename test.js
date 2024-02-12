@@ -1,6 +1,6 @@
 // libraries
-const {Client, IntentsBitField, Collection} = require('discord.js');
-const {OpenAI} = require('openai');
+const { Client, IntentsBitField, Collection } = require('discord.js');
+const { OpenAI } = require('openai');
 const dotenv = require('dotenv');
 const fs = require('fs');
 
@@ -10,16 +10,16 @@ dotenv.config();
 // intents - these enable the bot to recieve specific events, as such are required to allow the bot to perform certain actions
 const botIntents = new IntentsBitField();
 botIntents.add(
-    IntentsBitField.Flags.Guilds,
-    IntentsBitField.Flags.GuildMessages,
-    IntentsBitField.Flags.GuildMessageTyping,
-    IntentsBitField.Flags.GuildEmojisAndStickers,
-    IntentsBitField.Flags.MessageContent,
-    IntentsBitField.Flags.GuildMembers,
+  IntentsBitField.Flags.Guilds,
+  IntentsBitField.Flags.GuildMessages,
+  IntentsBitField.Flags.GuildMessageTyping,
+  IntentsBitField.Flags.GuildEmojisAndStickers,
+  IntentsBitField.Flags.MessageContent,
+  IntentsBitField.Flags.GuildMembers,
 );
 
 // Initializes Discord bot with defined intents
-const client = new Client({intents: botIntents});
+const client = new Client({ intents: botIntents });
 
 //  Initialize OpenAI with API key
 const openai = new OpenAI({
@@ -45,17 +45,12 @@ for (const file of commandFiles) {
 
 // Log in to Discord using the token from .env
 client.login(process.env.DISCORD_TOKEN)
-    .then(() => {
-      console.log('Bot is logged in!');
-    })
-    .catch((error) => {
-      console.error('Error logging in:', error);
-    });
-
-
-// async function apiFetch(input) {
-//     return
-// }
+  .then(() => {
+    console.log('Bot is logged in!');
+  })
+  .catch((error) => {
+    console.error('Error logging in:', error);
+  });
 
 
 // message event listener for incoming messages
@@ -84,26 +79,24 @@ client.on('messageCreate', async (message) => {
       await message.channel.send('Sorry, that command does not exist!');
     }
   } else {
-    // Handle regular messages (processing with OpenAI)
+    // If the message received is not a command (i.e., it doesn't start with our command prefix '!'),
+    // this else handles regular messages (processing with OpenAI)
 
     try {
       //  Sends request to OpenAI API for response generation
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages: [
-          {'role': 'system', 'content': 'you are a helpful assistant.'},
-          {'role': 'user', 'content': message.content},
+          { 'role': 'system', 'content': 'you are a helpful assistant.' },
+          { 'role': 'user', 'content': message.content },
         ],
       });
 
       // this shows in console the json object of reply from the api
       console.log(response.choices[0]);
-      // CHECK the line below PLEASE: wouldn't be better to just log the content of the response message specifically, instead of the entire response object? they're both fine anyway!
-      // console.log(response.choices[0].message.content);
 
 
       // this makes the bot reply in discord
-      // DID YOU delete the first 'await' on purpose ? why?
       await message.channel.send(response.choices[0].message.content);
     } catch (error) {
       console.error('There was an error while processing the OpenAI response:', error);
