@@ -52,6 +52,22 @@ client.login(process.env.DISCORD_TOKEN)
       console.error('Error logging in:', error);
     });
 
+// message history handling
+
+const history = [];
+
+client.once('ready', async () => {
+
+});
+
+async function historyUpdate() {
+  try {
+
+  } catch (error) {
+
+  }
+};
+
 // this function handles the api request
 async function apiFetch(message) {
   return await openai.chat.completions.create({
@@ -95,12 +111,9 @@ client.on('messageCreate', async (message) => {
 
       // this shows in console the json object of reply from the api
       console.log(response.choices[0]);
-      // CHECK the line below PLEASE: wouldn't be better to just log the content of the response message specifically, instead of the entire response object? they're both fine anyway!
-      // console.log(response.choices[0].message.content);
 
 
       // this makes the bot reply in discord
-      // DID YOU delete the first 'await' on purpose ? why?
       await message.channel.send(response.choices[0].message.content);
     } catch (error) {
       console.error('There was an error while processing the OpenAI response:', error);
