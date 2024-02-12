@@ -9,10 +9,12 @@ module.exports = {
 
   // Execute function to handle command execution
   async execute(interaction) {
+    console.log({interaction});
+    console.log(interaction.author.username);
     // Access the user object who ran the command and reply with their username
     // 'interaction.username' contains information about the user who triggered the command
     // 'interaction.member' contains information about the user's membership in the guild
     // 'interaction.member.joinedAt' returns the date the user joined the guild
-    await interaction.reply(`This command was run by ${interaction.user.username}, who joined on ${interaction.member.joinedAt}.`);
+    await interaction.reply(`This command was run by ${interaction.author.username}, who joined on ${interaction.member.joinedAt}.`);
   },
 };
