@@ -90,7 +90,7 @@ async function handleRegularMessage(message) {
 }
 
 // Function to handle multimedia responses
-async function handleMultimedia(message) {
+const handleMultimedia = async (message) => {
   try {
     if (message.content.includes('cat')) {
       await message.channel.send({
@@ -103,14 +103,14 @@ async function handleMultimedia(message) {
         files: ['./multimedia-files/magicFluteMozart.mp3']
       });
     } else {
-      // If no multimedia content is found, do nothing
-      return;
+      return false;
     }
+    return true;
   } catch (error) {
     console.error('Error handling multimedia:', error);
     await message.channel.send('An error occurred while processing multimedia content.');
   }
-}
+};
 
 // Login to Discord and start the bot
 loginBot()
