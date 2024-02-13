@@ -22,9 +22,7 @@ botIntents.add(
 const client = new Client({ intents: botIntents });
 
 //  Initialize OpenAI with API key
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, });
 
 // POINT 8. COMMAND PROCESSING
 // Define the command prefix
@@ -42,7 +40,7 @@ for (const file of commandFiles) {
   client.commands.set(command.data.name, command);
 }
 
-// Define function to log in the bot
+// Function to handle bot login
 function loginBot() {
   return new Promise((resolve, reject) => {
     // Log in to Discord using the token from .env
@@ -53,12 +51,68 @@ function loginBot() {
       })
       .catch((error) => {
         console.error('Error logging in:', error);
-        reject(error); // Reject the promise with the error if login failsnode --trace-warnings
+        reject(error); // Reject the promise with the error if login fails
       });
   });
 }
 
-// Call the login function
+// Function to handle command execution
+async function handleCommand(message, commandName, args) {
+  if (client.commands.has(commandName)) {
+    const command = client.commands.get(commandName);
+    try {
+      await command.execute(message, args);
+    } catch (error) {
+      console.error('Error executing command:', error);
+      await message.channel.send('An error occurred while executing this command.');
+    }
+  } else {
+    await message.channel.send('Sorry, that command does not exist!');
+  }
+}
+
+// Function to handle regular message processing with OpenAI
+async function handleRegularMessage(message) {
+  try {
+    const response = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        { 'role': 'system', 'content': 'you are a helpful assistant.' },
+        { 'role': 'user', 'content': message.content },
+      ],
+    });
+    console.log(response.choices[0]);
+    await message.channel.send(response.choices[0].message.content);
+  } catch (error) {
+    console.error('There was an error while processing the OpenAI response:', error);
+    await message.channel.send('There was an error in processing your message.');
+  }
+}
+
+// Function to handle multimedia responses
+async function handleMultimedia(message) {
+  try {
+    if (message.content.includes('cat')) {
+      await message.channel.send({
+        files: ['./multimedia-files/cat.jpg']
+      });
+    } else if (message.content.includes('gif')) {
+      await message.channel.send('https://giphy.com/gifs/justin-mood-monday-mondays-1hqYk0leUMddBBkAM7');
+    } else if (message.content.includes('audio')) {
+      await message.channel.send({
+        files: ['./multimedia-files/magicFluteMozart.mp3']
+      });
+    } else {
+      // If no multimedia content is found, do nothing
+      return;
+    }
+  } catch (error) {
+    console.error('Error handling multimedia:', error);
+    await message.channel.send('An error occurred while processing multimedia content.');
+  }
+}
+
+// Login to Discord and start the bot
 loginBot()
   .then(() => {
     console.log('Bot is ready to receive commands!');
@@ -67,53 +121,19 @@ loginBot()
     console.error('Error while logging in:', error);
   });
 
-// message event listener for incoming messages
+// Event listener for incoming messages
 client.on('messageCreate', async (message) => {
+  // Ignore messages from bots or with no content
   if (message.author.bot || !message.content) return;
-  console.log('message get');
+
+  console.log('Message received:', message.content);
+
   // Check if the message starts with the command prefix
   if (message.content.startsWith(commandPrefix)) {
-    // Extract the command and arguments from the message content
     const [commandName, ...args] = message.content.slice(commandPrefix.length).trim().split(/ +/);
-
-    // Check if the command exists in the client.commands collection
-    if (client.commands.has(commandName)) {
-      // Get the command object from the collection
-      const command = client.commands.get(commandName);
-
-      try {
-        // Execute the command
-        await command.execute(message, args);
-      } catch (error) {
-        console.error('Error executing command:', error);
-        await message.channel.send('An error occurred while executing this command.');
-      }
-    } else {
-      // Command not found
-      await message.channel.send('Sorry, that command does not exist!');
-    }
+    await handleCommand(message, commandName, args);
   } else {
-    // If the message received is not a command (i.e., it doesn't start with our command prefix '!'),
-    // this else handles regular messages (processing with OpenAI)
-
-    try {
-      //  Sends request to OpenAI API for response generation
-      const response = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          { 'role': 'system', 'content': 'you are a helpful assistant.' },
-          { 'role': 'user', 'content': message.content },
-        ],
-      });
-
-      // this shows in console the json object of reply from the api
-      console.log(response.choices[0]);
-
-      // this makes the bot reply in discord
-      await message.channel.send(response.choices[0].message.content);
-    } catch (error) {
-      console.error('There was an error while processing the OpenAI response:', error);
-      await message.channel.send('There was an error in processing your message.');
-    }
+    await handleMultimedia(message); // Handle multimedia responses
+    await handleRegularMessage(message); // Handle regular messages with OpenAI
   }
 });

@@ -60,7 +60,7 @@ This project aims to create a Discord bot using Node.js that integrates with the
   - [ ] Implement moderation actions like `message.delete()` for removing inappropriate content and `guildMember.timeout()` for muting users.
 
 - **Multimedia Responses (Images, GIFs, Audio Clips)**
-  - [ ] Send multimedia content using `message.channel.send()` with the `files` option.
+  - [x] Send multimedia content using `message.channel.send()` with the `files` option.
   - [ ] Explore Discord.js voice modules for handling voice channels and streaming.
 
 ---
