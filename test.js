@@ -84,21 +84,7 @@ client.once(Events.ClientReady, async (client) => {
     const defaultServerChannel = await client.channels.fetch('1204751557166374975');
     // console.log(await defaultServerChannel.messages.fetch({limit: 10}));
     const historyJson = await defaultServerChannel.messages.fetch({limit: 10});
-    await historyJson.forEach((message) => {
-      if (message.author.bot && message.author.id !== client.user.id) return;
-
-      if (message.author.id === client.user.id) {
-        return history.unshift({
-          role: 'system',
-          content: message.content,
-        });
-      } else {
-        history.unshift({
-          role: 'user',
-          content: message.content,
-        });
-      }
-    });
+    await historyJson.forEach((message) => logMessage(message));
     console.log(history);
     console.log(`${client.user.tag} history ready`);
   } catch (error) {
