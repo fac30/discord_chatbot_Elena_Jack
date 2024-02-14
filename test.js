@@ -1,6 +1,6 @@
 // libraries
-const {Client, IntentsBitField, Collection, Events} = require('discord.js');
-const {OpenAI} = require('openai');
+const { Client, IntentsBitField, Collection, Events, Partials } = require('discord.js');
+const { OpenAI } = require('openai');
 const dotenv = require('dotenv');
 const fs = require('fs');
 
@@ -10,19 +10,22 @@ dotenv.config();
 // intents - these enable the bot to recieve specific events, as such are required to allow the bot to perform certain actions
 const botIntents = new IntentsBitField();
 botIntents.add(
-    IntentsBitField.Flags.Guilds,
-    IntentsBitField.Flags.GuildMessages,
-    IntentsBitField.Flags.GuildMessageTyping,
-    IntentsBitField.Flags.GuildEmojisAndStickers,
-    IntentsBitField.Flags.MessageContent,
-    IntentsBitField.Flags.GuildMembers,
+  IntentsBitField.Flags.Guilds,
+  IntentsBitField.Flags.GuildMessages,
+  IntentsBitField.Flags.GuildMessageTyping,
+  IntentsBitField.Flags.GuildEmojisAndStickers,
+  IntentsBitField.Flags.MessageContent,
+  IntentsBitField.Flags.GuildMembers,
+  IntentsBitField.Flags.DirectMessages,
+  IntentsBitField.Flags.DirectMessageReactions,
+  IntentsBitField.Flags.DirectMessageTyping,
 );
 
 // Initializes Discord bot with defined intents
-const client = new Client({intents: botIntents});
+const client = new Client({ intents: botIntents, partials: [Partials.Message, Partials.Channel, Partials.Reaction] });
 
 //  Initialize OpenAI with API key
-const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // POINT 8. COMMAND PROCESSING
 // Define the command prefix
@@ -45,14 +48,14 @@ function loginBot() {
   return new Promise((resolve, reject) => {
     // Log in to Discord using the token from .env
     client.login(process.env.DISCORD_TOKEN)
-        .then(() => {
-          console.log('Bot is logged in!');
-          resolve();
-        })
-        .catch((error) => {
-          console.error('Error logging in:', error);
-          reject(error); // Reject the promise with the error if login fails
-        });
+      .then(() => {
+        console.log('Bot is logged in!');
+        resolve();
+      })
+      .catch((error) => {
+        console.error('Error logging in:', error);
+        reject(error); // Reject the promise with the error if login fails
+      });
   });
 }
 
@@ -82,9 +85,9 @@ function logMessage(message) {
 client.once(Events.ClientReady, async (client) => {
   try {
     const defaultServerChannel = await client.channels.fetch('1204751557166374975');
-    const historyJson = await defaultServerChannel.messages.fetch({limit: 10});
+    const historyJson = await defaultServerChannel.messages.fetch({ limit: 10 });
     await historyJson.forEach((message) => logMessage(message));
-    history.unshift({'role': 'system', 'content': 'you are a helpful assistant.'});
+    history.unshift({ 'role': 'system', 'content': 'you are a helpful assistant.' });
     console.log(history);
     console.log(`${client.user.tag} history ready`);
   } catch (error) {
@@ -147,8 +150,8 @@ const handleMultimedia = async (message) => {
 
 // Event listener for incoming messages
 client.on('messageCreate', async (message) => {
-  // Ignore messages from bots or with no content
-  if (message.author.bot || !message.content) return;
+  // Ignore messages from bots
+  if (message.author.bot) return;
 
   console.log('Message received:', message.content);
 
@@ -156,9 +159,28 @@ client.on('messageCreate', async (message) => {
   if (message.content.startsWith(commandPrefix)) {
     const [commandName, ...args] = message.content.slice(commandPrefix.length).trim().split(/ +/);
     await handleCommand(message, commandName, args);
+  } else if (message.content.startsWith('!directmessage')) { // Add this condition
+    // Extract the user ID from the message content
+    const userId = message.content.split(' ')[1];
+
+    // Retrieve the user object using the user ID
+    const user = await client.users.fetch(userId).catch(() => null);
+
+    // Check if the user object exists
+    if (user) {
+      try {
+        // Send a direct message to the user
+        await user.send('Hello! This is a direct message from the bot.');
+        await message.channel.send('Direct message sent!');
+      } catch (error) {
+        console.error('Error sending direct message:', error);
+        await message.channel.send('Failed to send direct message.');
+      }
+    } else {
+      await message.channel.send('User not found.');
+    }
   } else {
-    await logMessage(message);
-    await handleMultimedia(message); // Handle multimedia responses
-    await handleRegularMessage(message); // Handle regular messages with OpenAI
+    await handleMultimedia(message);
+    await handleRegularMessage(message);
   }
 });
