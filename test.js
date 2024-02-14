@@ -113,13 +113,7 @@ const handleMultimedia = async (message) => {
 };
 
 // Login to Discord and start the bot
-loginBot()
-    .then(() => {
-      console.log('Bot is ready to receive commands!');
-    })
-    .catch((error) => {
-      console.error('Error while logging in:', error);
-    });
+loginBot();
 
 // Event listener for incoming messages
 client.on('messageCreate', async (message) => {
