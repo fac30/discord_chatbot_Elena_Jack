@@ -64,21 +64,23 @@ loginBot();
 
 // message history handling
 
-const history = [];
+let history = [];
 
-function logMessage(message) {
+async function logMessage(message) {
   if (message.author.bot && message.author.id !== client.user.id) return;
 
   if (message.author.id === client.user.id) {
-    return history.unshift({
+    return history.push({
       role: 'system',
       content: message.content,
     });
   } else {
-    history.unshift({
+    console.log(message.content);
+    history.push({
       role: 'user',
       content: message.content,
     });
+    console.log('message logged');
   }
 }
 
@@ -87,7 +89,8 @@ client.once(Events.ClientReady, async (client) => {
     const defaultServerChannel = await client.channels.fetch('1204751557166374975');
     const historyJson = await defaultServerChannel.messages.fetch({limit: 10});
     await historyJson.forEach((message) => logMessage(message));
-    history.unshift({'role': 'system', 'content': 'you are a helpful assistant.'});
+    history.push({'role': 'system', 'content': 'you are a helpful assistant.'});
+    history = history.reverse();
     console.log(history);
     console.log(`${client.user.tag} history ready`);
   } catch (error) {
@@ -117,7 +120,7 @@ async function handleRegularMessage(message) {
       model: 'gpt-3.5-turbo',
       messages: history,
     });
-    console.log(response.choices[0]);
+    console.log(history);
     await message.channel.send(response.choices[0].message.content);
   } catch (error) {
     console.error('There was an error while processing the OpenAI response:', error);
@@ -180,6 +183,7 @@ client.on('messageCreate', async (message) => {
       await message.channel.send('User not found.');
     }
   } else {
+    await logMessage(message);
     await handleMultimedia(message);
     await handleRegularMessage(message);
   }
