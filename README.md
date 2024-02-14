@@ -24,7 +24,7 @@ This project aims to create a Discord bot using Node.js that integrates with the
   - [x] Process incoming messages and respond with a "hello" message.
 
 - **Optimization**
-  - [ ] Implement efficient event handling.
+  - [x] Implement efficient event handling.
 
 - **OpenAI Chat Integration and Response Generation**
   - [x] Integrate OpenAI into the bot.
@@ -40,8 +40,8 @@ This project aims to create a Discord bot using Node.js that integrates with the
   - [x] Distinguish between general messages and commands meant for the bot.
 
 - **Error Handling**
-  - [ ] Implement error handling using `.catch` or `try...catch` within `fetch` or `async` functions.
-  - [ ] Manage exceptions and provide error messages if something goes wrong.
+  - [x] Implement error handling using `.catch` or `try...catch` within `fetch` or `async` functions.
+  - [x] Manage exceptions and provide error messages if something goes wrong.
 
 ## Stretch Goals
 
@@ -60,7 +60,7 @@ This project aims to create a Discord bot using Node.js that integrates with the
   - [ ] Implement moderation actions like `message.delete()` for removing inappropriate content and `guildMember.timeout()` for muting users.
 
 - **Multimedia Responses (Images, GIFs, Audio Clips)**
-  - [ ] Send multimedia content using `message.channel.send()` with the `files` option.
+  - [x] Send multimedia content using `message.channel.send()` with the `files` option.
   - [ ] Explore Discord.js voice modules for handling voice channels and streaming.
 
 ---
