@@ -63,20 +63,54 @@ loginBot();
 
 const history = [];
 
+function logMessage(message) {
+  if (message.author.bot && message.author.id !== client.user.id) return;
+
+  if (message.author.id === client.user.id) {
+    return history.unshift({
+      role: 'system',
+      content: message.content,
+    });
+  } else {
+    history.unshift({
+      role: 'user',
+      content: message.content,
+    });
+  }
+}
+
 client.once(Events.ClientReady, async (client) => {
   try {
-    console.log(`${client.user.tag} ready`);
     const defaultServerChannel = await client.channels.fetch('1204751557166374975');
-    console.log(defaultServerChannel);
-    await defaultServerChannel.send('this is default');
+    // console.log(await defaultServerChannel.messages.fetch({limit: 10}));
+    const historyJson = await defaultServerChannel.messages.fetch({limit: 10});
+    await historyJson.forEach((message) => {
+      if (message.author.bot && message.author.id !== client.user.id) return;
+
+      if (message.author.id === client.user.id) {
+        return history.unshift({
+          role: 'system',
+          content: message.content,
+        });
+      } else {
+        history.unshift({
+          role: 'user',
+          content: message.content,
+        });
+      }
+    });
+    console.log(history);
+    console.log(`${client.user.tag} history ready`);
   } catch (error) {
     console.error('History initialisation error', error);
   }
 });
 
-async function historyUpdate() {
+async function historyUpdate(message) {
   try {
+    if (condition) {
 
+    }
   } catch (error) {
     console.error('History update had an error', error);
   }
