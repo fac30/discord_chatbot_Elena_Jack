@@ -44,9 +44,11 @@ for (const file of commandFiles) {
 
 
 // Log in to Discord using the token from .env
+const jelena = {ready: false};
 client.login(process.env.DISCORD_TOKEN)
     .then(() => {
       console.log('Bot is logged in!');
+      jelena.ready = true;
     })
     .catch((error) => {
       console.error('Error logging in:', error);
@@ -57,14 +59,22 @@ client.login(process.env.DISCORD_TOKEN)
 const history = [];
 
 client.once('ready', async () => {
-
+  try {
+    if (jelena.ready) {
+      const defaultServerChannel = await client.channel.fetch('1204751557166374975');
+    }
+    console.log('ready');
+    // console.log(defaultServerChannel);
+  } catch (error) {
+    console.error('History initialisation error', error);
+  }
 });
 
 async function historyUpdate() {
   try {
 
   } catch (error) {
-
+    console.error('History update had an error', error);
   }
 };
 
