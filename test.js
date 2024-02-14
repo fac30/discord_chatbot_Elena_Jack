@@ -61,9 +61,7 @@ loginBot();
 
 // message history handling
 
-const history = [
-  {'role': 'system', 'content': 'you are a helpful assistant.'},
-];
+const history = [];
 
 function logMessage(message) {
   if (message.author.bot && message.author.id !== client.user.id) return;
@@ -86,6 +84,7 @@ client.once(Events.ClientReady, async (client) => {
     const defaultServerChannel = await client.channels.fetch('1204751557166374975');
     const historyJson = await defaultServerChannel.messages.fetch({limit: 10});
     await historyJson.forEach((message) => logMessage(message));
+    history.unshift({'role': 'system', 'content': 'you are a helpful assistant.'});
     console.log(history);
     console.log(`${client.user.tag} history ready`);
   } catch (error) {
