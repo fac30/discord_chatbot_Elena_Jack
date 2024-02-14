@@ -61,7 +61,9 @@ loginBot();
 
 // message history handling
 
-const history = [];
+const history = [
+  {'role': 'system', 'content': 'you are a helpful assistant.'},
+];
 
 function logMessage(message) {
   if (message.author.bot && message.author.id !== client.user.id) return;
@@ -111,10 +113,7 @@ async function handleRegularMessage(message) {
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
-      messages: [
-        {'role': 'system', 'content': 'you are a helpful assistant.'},
-        {'role': 'user', 'content': message.content},
-      ],
+      messages: history,
     });
     console.log(response.choices[0]);
     await message.channel.send(response.choices[0].message.content);
