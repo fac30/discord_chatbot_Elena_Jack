@@ -82,7 +82,6 @@ function logMessage(message) {
 client.once(Events.ClientReady, async (client) => {
   try {
     const defaultServerChannel = await client.channels.fetch('1204751557166374975');
-    // console.log(await defaultServerChannel.messages.fetch({limit: 10}));
     const historyJson = await defaultServerChannel.messages.fetch({limit: 10});
     await historyJson.forEach((message) => logMessage(message));
     console.log(history);
@@ -91,17 +90,6 @@ client.once(Events.ClientReady, async (client) => {
     console.error('History initialisation error', error);
   }
 });
-
-async function historyUpdate(message) {
-  try {
-    if (condition) {
-
-    }
-  } catch (error) {
-    console.error('History update had an error', error);
-  }
-};
-
 
 // Function to handle command execution
 async function handleCommand(message, commandName, args) {
@@ -171,6 +159,7 @@ client.on('messageCreate', async (message) => {
     const [commandName, ...args] = message.content.slice(commandPrefix.length).trim().split(/ +/);
     await handleCommand(message, commandName, args);
   } else {
+    await logMessage(message);
     await handleMultimedia(message); // Handle multimedia responses
     await handleRegularMessage(message); // Handle regular messages with OpenAI
   }
