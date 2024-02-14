@@ -1,5 +1,5 @@
 // libraries
-const {Client, IntentsBitField, Collection} = require('discord.js');
+const {Client, IntentsBitField, Collection, Events} = require('discord.js');
 const {OpenAI} = require('openai');
 const dotenv = require('dotenv');
 const fs = require('fs');
@@ -56,6 +56,42 @@ function loginBot() {
   });
 }
 
+// Login to Discord and start the bot
+loginBot();
+
+// message history handling
+
+const history = [];
+
+function logMessage(message) {
+  if (message.author.bot && message.author.id !== client.user.id) return;
+
+  if (message.author.id === client.user.id) {
+    return history.unshift({
+      role: 'system',
+      content: message.content,
+    });
+  } else {
+    history.unshift({
+      role: 'user',
+      content: message.content,
+    });
+  }
+}
+
+client.once(Events.ClientReady, async (client) => {
+  try {
+    const defaultServerChannel = await client.channels.fetch('1204751557166374975');
+    const historyJson = await defaultServerChannel.messages.fetch({limit: 10});
+    await historyJson.forEach((message) => logMessage(message));
+    history.unshift({'role': 'system', 'content': 'you are a helpful assistant.'});
+    console.log(history);
+    console.log(`${client.user.tag} history ready`);
+  } catch (error) {
+    console.error('History initialisation error', error);
+  }
+});
+
 // Function to handle command execution
 async function handleCommand(message, commandName, args) {
   if (client.commands.has(commandName)) {
@@ -76,10 +112,7 @@ async function handleRegularMessage(message) {
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
-      messages: [
-        {'role': 'system', 'content': 'you are a helpful assistant.'},
-        {'role': 'user', 'content': message.content},
-      ],
+      messages: history,
     });
     console.log(response.choices[0]);
     await message.channel.send(response.choices[0].message.content);
@@ -112,9 +145,6 @@ const handleMultimedia = async (message) => {
   }
 };
 
-// Login to Discord and start the bot
-loginBot();
-
 // Event listener for incoming messages
 client.on('messageCreate', async (message) => {
   // Ignore messages from bots or with no content
@@ -127,6 +157,7 @@ client.on('messageCreate', async (message) => {
     const [commandName, ...args] = message.content.slice(commandPrefix.length).trim().split(/ +/);
     await handleCommand(message, commandName, args);
   } else {
+    await logMessage(message);
     await handleMultimedia(message); // Handle multimedia responses
     await handleRegularMessage(message); // Handle regular messages with OpenAI
   }
