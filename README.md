@@ -46,7 +46,7 @@ This project aims to create a Discord bot using Node.js that integrates with the
 ## Stretch Goals
 
 - **Messaging Users Directly**
-  - [ ] Utilize the `user.send()` method in Discord.js to send direct messages to users.
+  - [x] Utilize the `user.send()` method in Discord.js to send direct messages to users.
 
 - **Dialogue Boxes and Interactive Responses**
   - [ ] Implement Discord's message components like buttons and select menus using `MessageActionRow` and `MessageButton` or `MessageSelectMenu` classes from Discord.js.
