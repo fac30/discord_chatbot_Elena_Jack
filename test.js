@@ -1,6 +1,6 @@
 // libraries
-const { Client, IntentsBitField, Collection } = require('discord.js');
-const { OpenAI } = require('openai');
+const {Client, IntentsBitField, Collection} = require('discord.js');
+const {OpenAI} = require('openai');
 const dotenv = require('dotenv');
 const fs = require('fs');
 
@@ -10,19 +10,19 @@ dotenv.config();
 // intents - these enable the bot to recieve specific events, as such are required to allow the bot to perform certain actions
 const botIntents = new IntentsBitField();
 botIntents.add(
-  IntentsBitField.Flags.Guilds,
-  IntentsBitField.Flags.GuildMessages,
-  IntentsBitField.Flags.GuildMessageTyping,
-  IntentsBitField.Flags.GuildEmojisAndStickers,
-  IntentsBitField.Flags.MessageContent,
-  IntentsBitField.Flags.GuildMembers,
+    IntentsBitField.Flags.Guilds,
+    IntentsBitField.Flags.GuildMessages,
+    IntentsBitField.Flags.GuildMessageTyping,
+    IntentsBitField.Flags.GuildEmojisAndStickers,
+    IntentsBitField.Flags.MessageContent,
+    IntentsBitField.Flags.GuildMembers,
 );
 
 // Initializes Discord bot with defined intents
-const client = new Client({ intents: botIntents });
+const client = new Client({intents: botIntents});
 
 //  Initialize OpenAI with API key
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, });
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // POINT 8. COMMAND PROCESSING
 // Define the command prefix
@@ -45,14 +45,14 @@ function loginBot() {
   return new Promise((resolve, reject) => {
     // Log in to Discord using the token from .env
     client.login(process.env.DISCORD_TOKEN)
-      .then(() => {
-        console.log('Bot is logged in!');
-        resolve();
-      })
-      .catch((error) => {
-        console.error('Error logging in:', error);
-        reject(error); // Reject the promise with the error if login fails
-      });
+        .then(() => {
+          console.log('Bot is logged in!');
+          resolve();
+        })
+        .catch((error) => {
+          console.error('Error logging in:', error);
+          reject(error); // Reject the promise with the error if login fails
+        });
   });
 }
 
@@ -77,8 +77,8 @@ async function handleRegularMessage(message) {
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
-        { 'role': 'system', 'content': 'you are a helpful assistant.' },
-        { 'role': 'user', 'content': message.content },
+        {'role': 'system', 'content': 'you are a helpful assistant.'},
+        {'role': 'user', 'content': message.content},
       ],
     });
     console.log(response.choices[0]);
@@ -94,13 +94,13 @@ const handleMultimedia = async (message) => {
   try {
     if (message.content.includes('cat')) {
       await message.channel.send({
-        files: ['./multimedia-files/cat.jpg']
+        files: ['./multimedia-files/cat.jpg'],
       });
     } else if (message.content.includes('gif')) {
       await message.channel.send('https://giphy.com/gifs/justin-mood-monday-mondays-1hqYk0leUMddBBkAM7');
     } else if (message.content.includes('audio')) {
       await message.channel.send({
-        files: ['./multimedia-files/magicFluteMozart.mp3']
+        files: ['./multimedia-files/magicFluteMozart.mp3'],
       });
     } else {
       return false;
@@ -114,12 +114,12 @@ const handleMultimedia = async (message) => {
 
 // Login to Discord and start the bot
 loginBot()
-  .then(() => {
-    console.log('Bot is ready to receive commands!');
-  })
-  .catch((error) => {
-    console.error('Error while logging in:', error);
-  });
+    .then(() => {
+      console.log('Bot is ready to receive commands!');
+    })
+    .catch((error) => {
+      console.error('Error while logging in:', error);
+    });
 
 // Event listener for incoming messages
 client.on('messageCreate', async (message) => {
