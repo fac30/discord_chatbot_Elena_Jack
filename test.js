@@ -1,5 +1,5 @@
 // libraries
-const {Client, IntentsBitField, Collection} = require('discord.js');
+const {Client, IntentsBitField, Collection, Events} = require('discord.js');
 const {OpenAI} = require('openai');
 const dotenv = require('dotenv');
 const fs = require('fs');
@@ -41,13 +41,11 @@ for (const file of commandFiles) {
 }
 
 // Function to handle bot login
-const jelena = {ready: false};
 function loginBot() {
   return new Promise((resolve, reject) => {
     // Log in to Discord using the token from .env
     client.login(process.env.DISCORD_TOKEN)
         .then(() => {
-          jelena.ready = true;
           console.log('Bot is logged in!');
           resolve();
         })
@@ -58,17 +56,19 @@ function loginBot() {
   });
 }
 
+// Login to Discord and start the bot
+loginBot();
+
 // message history handling
 
 const history = [];
 
-client.once('ready', async () => {
+client.once(Events.ClientReady, async (client) => {
   try {
-    if (jelena.ready) {
-      const defaultServerChannel = await client.channel.fetch('1204751557166374975');
-    }
-    console.log('ready');
+    console.log(`${client.user.tag} ready`);
+    const defaultServerChannel = await client.channels.fetch('1204751557166374975');
     console.log(defaultServerChannel);
+    await defaultServerChannel.send('this is default');
   } catch (error) {
     console.error('History initialisation error', error);
   }
@@ -138,9 +138,6 @@ const handleMultimedia = async (message) => {
     await message.channel.send('An error occurred while processing multimedia content.');
   }
 };
-
-// Login to Discord and start the bot
-loginBot();
 
 // Event listener for incoming messages
 client.on('messageCreate', async (message) => {
