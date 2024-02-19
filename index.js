@@ -160,10 +160,12 @@ client.on('messageCreate', async (message) => {
 
   // Check if the message starts with the command prefix
   if (message.content.startsWith(commandPrefix)) {
+    console.log('this is blocking');
     const [commandName, ...args] = message.content.slice(commandPrefix.length).trim().split(/ +/);
     await handleCommand(message, commandName, args);
   } else if (message.content.startsWith('!directmessage')) { // Add this condition
     // Extract the user ID from the message content
+    console.log('this condition is triggered');
     const userId = message.content.split(' ')[1];
 
     // Retrieve the user object using the user ID
