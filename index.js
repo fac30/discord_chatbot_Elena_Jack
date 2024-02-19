@@ -163,7 +163,7 @@ client.on('messageCreate', async (message) => {
     console.log('this is blocking');
     const [commandName, ...args] = message.content.slice(commandPrefix.length).trim().split(/ +/);
     await handleCommand(message, commandName, args);
-  } else if (message.content.startsWith('!directmessage')) { // Add this condition
+  } else if (message.content.startsWith('!dm')) { // Add this condition
     // Extract the user ID from the message content
     console.log('this condition is triggered');
     const userId = message.content.split(' ')[1];
