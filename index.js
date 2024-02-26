@@ -154,11 +154,6 @@ const handleMultimedia = async (message) => {
 // Event listener for incoming messages
 client.on('messageCreate', async (message) => {
   try {
-    // Ignore messages from bots
-    if (message.author.bot) return;
-
-    console.log('Message received:', message.content);
-
     // Check if the message is a command
     if (message.content.startsWith(commandPrefix)) {
       const [commandName, ...args] = message.content.slice(commandPrefix.length).trim().split(/ +/);
@@ -168,14 +163,19 @@ client.on('messageCreate', async (message) => {
         // Handle direct message command
         const username = args[0]; // Get the username from the command arguments
 
-        // Find the user by their username
-        const user = client.users.cache.find(user => user.username === username);
+        try {
+          // Find the user by their username
+          const user = client.users.cache.find(user => user.username === username);
 
-        if (user) {
-          await user.send('Hello! This is a direct message from me, Jelena the bot. How can I help you?');
-          await message.channel.send('Direct message sent!');
-        } else {
-          await message.channel.send('User not found.');
+          if (user) {
+            await user.send('Hello! This is a direct message from me, Jelena the bot. How can I help you?');
+            await message.channel.send('Direct message sent!');
+          } else {
+            await message.channel.send('User not found.');
+          }
+        } catch (error) {
+          console.error('Error fetching user:', error);
+          await message.channel.send('An error occurred while fetching the user.');
         }
       } else {
         // Handle other commands
@@ -187,7 +187,6 @@ client.on('messageCreate', async (message) => {
       await handleMultimedia(message);
       await handleRegularMessage(message);
     }
-
   } catch (error) {
     console.error('Error processing message:', error);
     await message.channel.send('An error occurred while processing your message.');
