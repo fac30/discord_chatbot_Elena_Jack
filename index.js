@@ -154,6 +154,11 @@ const handleMultimedia = async (message) => {
 // Event listener for incoming messages
 client.on('messageCreate', async (message) => {
   try {
+    // Ignore messages from bots
+    if (message.author.bot) return;
+
+    console.log('Message received:', message.content);
+
     // Check if the message is a command
     if (message.content.startsWith(commandPrefix)) {
       const [commandName, ...args] = message.content.slice(commandPrefix.length).trim().split(/ +/);
