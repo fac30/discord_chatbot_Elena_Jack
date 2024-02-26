@@ -166,13 +166,10 @@ client.on('messageCreate', async (message) => {
       // Handle !dm command separately
       if (commandName === 'dm') {
         // Handle direct message command
-        const userId = args[0];
-        let user;
-        try {
-          user = await client.users.fetch(userId);
-        } catch (error) {
-          console.error('Error fetching user:', error);
-        }
+        const username = args[0]; // Get the username from the command arguments
+
+        // Find the user by their username
+        const user = client.users.cache.find(user => user.username === username);
 
         if (user) {
           await user.send('Hello! This is a direct message from me, Jelena the bot. How can I help you?');
@@ -190,6 +187,7 @@ client.on('messageCreate', async (message) => {
       await handleMultimedia(message);
       await handleRegularMessage(message);
     }
+
   } catch (error) {
     console.error('Error processing message:', error);
     await message.channel.send('An error occurred while processing your message.');
