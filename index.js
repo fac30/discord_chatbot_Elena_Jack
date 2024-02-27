@@ -43,6 +43,13 @@ for (const file of commandFiles) {
   client.commands.set(command.data.name, command);
 }
 
+// Import the button command
+const buttonCommand = require('./commands/button.js');
+
+// Register the button command
+client.commands.set(buttonCommand.data.name, buttonCommand);
+
+
 // Function to handle bot login
 function loginBot() {
   return new Promise((resolve, reject) => {
@@ -169,7 +176,7 @@ client.on('messageCreate', async (message) => {
         const username = args[0]; // Get the username from the command arguments
 
         // Find the user by their username
-        const user = client.users.cache.find(user => user.username === username);
+        const user = client.users.cache.find((user) => user.username === username);
 
         if (user) {
           await user.send('Hello! This is a direct message from me, Jelena the bot. How can I help you?');
@@ -187,9 +194,26 @@ client.on('messageCreate', async (message) => {
       await handleMultimedia(message);
       await handleRegularMessage(message);
     }
-
   } catch (error) {
     console.error('Error processing message:', error);
     await message.channel.send('An error occurred while processing your message.');
+  }
+});
+
+// Event listener for button interactions
+client.on('interactionCreate', async (interaction) => {
+  try {
+    if (!interaction.isButton()) return;
+
+    if (interaction.customId === 'deleting') {
+      await interaction.reply('You clicked the delete button!');
+    } else if (interaction.customId === 'button') {
+      await interaction.reply('You clicked the button!');
+    } else if (interaction.customId === 'success') {
+      await interaction.reply('You clicked the success button!');
+    }
+  } catch (error) {
+    console.error('Error handling button interaction:', error);
+    await interaction.reply('An error occurred while handling the button interaction.');
   }
 });
