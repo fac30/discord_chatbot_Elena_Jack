@@ -39,16 +39,40 @@ const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith
 
 // Load each command file and add it to the client.commands collection
 for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
-  client.commands.set(command.data.name, command);
+  try {
+    const command = require(`./commands/${file}`);
+    if (command.data && command.data.name) {
+      // If the command has data.name, set it in the collection
+      client.commands.set(command.data.name, command);
+    } else {
+      console.error(`Error loading command from file ${file}: Command data or name is missing.`);
+    }
+  } catch (error) {
+    console.error(`Error loading command file ${file}:`, error);
+  }
 }
 
 // Import the button command
 const buttonCommand = require('./commands/button.js');
 
-// Register the button command
-client.commands.set(buttonCommand.data.name, buttonCommand);
+// Check if buttonCommand and buttonCommand.data exist and if data has the name property
+if (buttonCommand && buttonCommand.data && buttonCommand.data.name) {
+  // Set the button command in the client.commands collection using its name
+  client.commands.set(buttonCommand.data.name, buttonCommand);
+} else {
+  console.error('Error loading button command:', buttonCommand);
+}
 
+// Import the meme command
+const memeCommand = require('./commands/meme.js');
+
+// Check if memeCommand and memeCommand.data exist and if data has the name property
+if (memeCommand && memeCommand.data && memeCommand.data.name) {
+  // Set the meme command in the client.commands collection using its name
+  client.commands.set(memeCommand.data.name, memeCommand);
+} else {
+  console.error('Error loading meme command:', memeCommand);
+}
 
 // Function to handle bot login
 function loginBot() {
@@ -208,7 +232,7 @@ client.on('interactionCreate', async (interaction) => {
     if (interaction.customId === 'deleting') {
       await interaction.reply('You clicked the delete button!');
     } else if (interaction.customId === 'button') {
-      await interaction.reply('You clicked the button!');
+      await interaction.reply('You clicked the middle button!');
     } else if (interaction.customId === 'success') {
       await interaction.reply('You clicked the success button!');
     }
