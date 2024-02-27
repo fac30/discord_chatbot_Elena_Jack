@@ -11,8 +11,8 @@ module.exports = {
             .setLabel('Success')
             .setStyle(ButtonStyle.Success);
 
-        const button = new ButtonBuilder()
-            .setCustomId('button')
+        const middlebutton = new ButtonBuilder()
+            .setCustomId('middlebutton')
             .setLabel('Button')
             .setStyle(ButtonStyle.Secondary);
 
@@ -22,8 +22,13 @@ module.exports = {
             .setLabel('Delete')
             .setStyle(ButtonStyle.Danger);
 
+        const button = new ButtonBuilder()
+            .setLabel('discord.js docs')
+            .setURL('https://discord.js.org')
+            .setStyle(ButtonStyle.Link);
+
         const row = new ActionRowBuilder()
-            .addComponents(success, button, deleting);
+            .addComponents(success, middlebutton, deleting, button);
 
         await interaction.reply({
             content: `Selection of buttons.`,
