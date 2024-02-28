@@ -71,7 +71,7 @@ This project aims to create a Discord bot using Node.js that integrates with the
 - [x] Verify Discord.js integration by creating a test function that creates a new Discord client.
 
 ### OpenAI Library Integration
-- [ ] Ensure that the OpenAI library is correctly integrated by creating a test function that attempts to use the OpenAI API to create a simple chat completion or query.
+- [x] Ensure that the OpenAI library is correctly integrated by creating a test function that attempts to use the OpenAI API to create a simple chat completion or query.
 
 ### API Key Security
 - [ ] Test that the bot securely loads API keys from the `.env` file, confirming that no sensitive information is hard-coded.
