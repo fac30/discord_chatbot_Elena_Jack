@@ -13,7 +13,7 @@ module.exports = {
 
         const middlebutton = new ButtonBuilder()
             .setCustomId('middlebutton')
-            .setLabel('Button')
+            .setLabel('Middlebutton')
             .setStyle(ButtonStyle.Secondary);
 
 

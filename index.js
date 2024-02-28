@@ -231,13 +231,17 @@ client.on('interactionCreate', async (interaction) => {
 
     if (interaction.customId === 'deleting') {
       await interaction.reply('You clicked the delete button!');
-    } else if (interaction.customId === 'button') {
+    } else if (interaction.customId === 'middlebutton') {
       await interaction.reply('You clicked the middle button!');
     } else if (interaction.customId === 'success') {
       await interaction.reply('You clicked the success button!');
+    } else if (interaction.customId === 'discordjs') {
+      // This customId should match the one set for the link button
+      await interaction.reply('You clicked the discord.js link button!');
     }
   } catch (error) {
     console.error('Error handling button interaction:', error);
     await interaction.reply('An error occurred while handling the button interaction.');
   }
 });
+
