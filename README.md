@@ -65,7 +65,43 @@ This project aims to create a Discord bot using Node.js that integrates with the
 
 ---
 
-    
+## Testing Checklist
+
+### Discord.js Integration Verification
+- [x] Verify Discord.js integration by creating a test function that creates a new Discord client.
+
+### OpenAI Library Integration
+- [ ] Ensure that the OpenAI library is correctly integrated by creating a test function that attempts to use the OpenAI API to create a simple chat completion or query.
+
+### API Key Security
+- [ ] Test that the bot securely loads API keys from the `.env` file, confirming that no sensitive information is hard-coded.
+
+### Bot Initialization and Login
+- [ ] Ensure that the bot initializes and logs into Discord successfully.
+
+### Message Event Handling
+- [ ] Simulate receiving a message and verify that the bot responds with a "hello" message, testing the message event listener's functionality.
+
+### Command Processing
+- [ ] Simulate commands directed at the bot to check if it accurately processes these commands from general messages.
+
+### Error Handling
+- [ ] Introduce faults or exceptions in bot interactions to verify that the bot's error handling mechanisms effectively manage and log errors.
+
+### Response Formatting and Dispatching
+- [ ] Mock the process of sending responses back to the Discord channel, verifying that the bot formats and dispatches messages correctly.
+
+### Direct Messaging
+- [ ] Ensure the bot can send direct messages to users, testing the `user.send()` method's functionality.
+
+### Multimedia Response Handling
+- [ ] Test the bot's ability to send multimedia responses under specified conditions, ensuring it can handle images, GIFs, and audio clips effectively.
+
+
+
+---
+
+
 # Extra Notes
 
 ## View a branch when reviewing a pull request
