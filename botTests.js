@@ -1,101 +1,89 @@
-// const { Client } = require('discord.js');
-// const { OpenAI } = require('openai');
-// const dotenv = require('dotenv');
+//  Verify Discord.js integration by creating a test function that creates a new Discord client
+// Import necessary modules
+const { Client, IntentsBitField } = require('discord.js');
 
-// dotenv.config();
+// Custom assertion function to compare actual and expected values
+function assertEqual(actual, expected, message) {
+  if (actual !== expected) {
+    throw new Error(`${message}: Expected ${expected}, but got ${actual}`);
+  }
+}
 
-// // Import your bot's main file
-// const { handleCommand, handleRegularMessage, loginBot } = require('./index');
+// Test function to create a new Discord client
+function testDiscordIntegration() {
+  try {
+    console.log('Initializing Discord client...');
 
-// // Initialize a Discord client for testing
-// const client = new Client();
+    // Arrange: Define bot intents
+    console.log('Defining bot intents...');
+    const botIntents = new IntentsBitField();
+    botIntents.add(
+      IntentsBitField.Flags.Guilds,
+      IntentsBitField.Flags.GuildMessages,
+      IntentsBitField.Flags.GuildMessageTyping,
+      IntentsBitField.Flags.GuildEmojisAndStickers,
+      IntentsBitField.Flags.MessageContent,
+      IntentsBitField.Flags.GuildMembers,
+      IntentsBitField.Flags.DirectMessages,
+      IntentsBitField.Flags.DirectMessageReactions,
+      IntentsBitField.Flags.DirectMessageTyping,
+    );
 
-// // Test Discord.js integration by creating a new Discord client
-// const testDiscordIntegration = () => {
-//     console.log('Testing Discord.js integration...');
-//     if (client instanceof Client) {
-//         console.log('Discord.js integration test passed.');
-//     } else {
-//         console.error('Discord.js integration test failed.');
-//     }
-// };
+    // Act: Try to create a new Discord client
+    console.log('Creating Discord client...');
+    const client = new Client({ intents: botIntents });
 
-// // Test OpenAI library integration
-// const testOpenAIIntegration = () => {
-//     console.log('Testing OpenAI library integration...');
-//     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-//     if (openai instanceof OpenAI) {
-//         console.log('OpenAI library integration test passed.');
-//     } else {
-//         console.error('OpenAI library integration test failed.');
-//     }
-// };
+    // Assert: Check if client is an instance of Client
+    console.log('Asserting Discord client creation...');
+    assertEqual(typeof client, 'object', 'Client type');
+    assertEqual(client instanceof Client, true, 'Client instance');
 
-// // Test loading API keys securely from .env file
-// const testAPILoading = () => {
-//     console.log('Testing loading API keys from .env file...');
-//     if (process.env.DISCORD_TOKEN && process.env.OPENAI_API_KEY) {
-//         console.log('API key loading test passed.');
-//     } else {
-//         console.error('API key loading test failed.');
-//     }
-// };
+    console.log('Discord.js integration test passed successfully.');
+  } catch (error) {
+    console.error('Discord.js integration test failed:', error.message);
+  }
+}
 
-// // Test bot login to Discord
-// const testBotLogin = async () => {
-//     console.log('Testing bot login to Discord...');
-//     try {
-//         await loginBot();
-//         console.log('Bot login test passed.');
-//     } catch (error) {
-//         console.error('Bot login test failed:', error);
-//     }
-// };
+// Call the test function
+testDiscordIntegration();
 
-// // Test handling of bot commands
-// const testBotCommands = async () => {
-//     console.log('Testing handling of bot commands...');
-//     const message = {
-//         content: '!testcommand arg1 arg2',
-//         author: {
-//             bot: false,
-//         },
-//         channel: {
-//             send: () => { },
-//         },
-//     };
-//     // Mock command for testing purposes
-//     const mockCommand = {
-//         execute: () => { },
-//     };
-//     client.commands = new Map();
-//     client.commands.set('testcommand', mockCommand);
-//     await handleCommand(message, 'testcommand', ['arg1', 'arg2']);
-//     console.log('Bot command handling test passed.');
-// };
 
-// // Test handling of regular messages with OpenAI
-// const testRegularMessageHandling = async () => {
-//     console.log('Testing handling of regular messages with OpenAI...');
-//     const message = {
-//         content: 'This is a test message',
-//         channel: {
-//             send: () => { },
-//         },
-//     };
-//     await handleRegularMessage(message);
-//     console.log('Regular message handling test passed.');
-// };
+// ---------------------------------------------------------------------------------
+// Eesure that the OpenAI library is correctly integrated by creating a test function that attempts to use the OpenAI API to create a simple chat completion or query.
 
-// // Run all tests
-// const runTests = async () => {
-//     testDiscordIntegration();
-//     testOpenAIIntegration();
-//     testAPILoading();
-//     await testBotLogin();
-//     await testBotCommands();
-//     await testRegularMessageHandling();
-// };
+// OpenAI Library Integration Test
+// Import necessary modules
+const { OpenAI } = require('openai');
 
-// // Run tests
-// runTests();
+// Custom assertion function to compare actual and expected values
+function assertEqual(actual, expected, message) {
+  if (actual !== expected) {
+    throw new Error(`${message}: Expected ${expected}, but got ${actual}`);
+  }
+}
+
+// Test function to check OpenAI library integration
+function testOpenAIIntegration() {
+  try {
+    console.log('Initializing OpenAI integration test...');
+
+    // Act: Try to create an instance of OpenAI
+    const openai = new OpenAI({ apiKey: 'OpenAI_API_Key_Here' });
+
+    // Assert: Check if openai is an instance of OpenAI
+    assertEqual(typeof openai, 'object', 'OpenAI type');
+    assertEqual(openai instanceof OpenAI, true, 'OpenAI instance');
+
+    console.log('OpenAI library integration test passed successfully.');
+  } catch (error) {
+    console.error('OpenAI library integration test failed:', error.message);
+  }
+}
+
+// Call the test function
+testOpenAIIntegration();
+
+// ----------------------------------------------------------------------------------------------
+
+
+
