@@ -39,8 +39,39 @@ const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith
 
 // Load each command file and add it to the client.commands collection
 for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
-  client.commands.set(command.data.name, command);
+  try {
+    const command = require(`./commands/${file}`);
+    if (command.data && command.data.name) {
+      // If the command has data.name, set it in the collection
+      client.commands.set(command.data.name, command);
+    } else {
+      console.error(`Error loading command from file ${file}: Command data or name is missing.`);
+    }
+  } catch (error) {
+    console.error(`Error loading command file ${file}:`, error);
+  }
+}
+
+// Import the button command
+const buttonCommand = require('./commands/button.js');
+
+// Check if buttonCommand and buttonCommand.data exist and if data has the name property
+if (buttonCommand && buttonCommand.data && buttonCommand.data.name) {
+  // Set the button command in the client.commands collection using its name
+  client.commands.set(buttonCommand.data.name, buttonCommand);
+} else {
+  console.error('Error loading button command:', buttonCommand);
+}
+
+// Import the meme command
+const memeCommand = require('./commands/meme.js');
+
+// Check if memeCommand and memeCommand.data exist and if data has the name property
+if (memeCommand && memeCommand.data && memeCommand.data.name) {
+  // Set the meme command in the client.commands collection using its name
+  client.commands.set(memeCommand.data.name, memeCommand);
+} else {
+  console.error('Error loading meme command:', memeCommand);
 }
 
 // Function to handle bot login
@@ -169,7 +200,7 @@ client.on('messageCreate', async (message) => {
         const username = args[0]; // Get the username from the command arguments
 
         // Find the user by their username
-        const user = client.users.cache.find(user => user.username === username);
+        const user = client.users.cache.find((user) => user.username === username);
 
         if (user) {
           await user.send('Hello! This is a direct message from me, Jelena the bot. How can I help you?');
@@ -187,9 +218,30 @@ client.on('messageCreate', async (message) => {
       await handleMultimedia(message);
       await handleRegularMessage(message);
     }
-
   } catch (error) {
     console.error('Error processing message:', error);
     await message.channel.send('An error occurred while processing your message.');
   }
 });
+
+// Event listener for button interactions
+client.on('interactionCreate', async (interaction) => {
+  try {
+    if (!interaction.isButton()) return;
+
+    if (interaction.customId === 'deleting') {
+      await interaction.reply('You clicked the delete button!');
+    } else if (interaction.customId === 'middlebutton') {
+      await interaction.reply('You clicked the middle button!');
+    } else if (interaction.customId === 'success') {
+      await interaction.reply('You clicked the success button!');
+    } else if (interaction.customId === 'discordjs') {
+      // This customId should match the one set for the link button
+      await interaction.reply('You clicked the discord.js link button!');
+    }
+  } catch (error) {
+    console.error('Error handling button interaction:', error);
+    await interaction.reply('An error occurred while handling the button interaction.');
+  }
+});
+
