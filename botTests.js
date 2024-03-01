@@ -49,18 +49,11 @@ testDiscordIntegration();
 
 
 // ---------------------------------------------------------------------------------
-// Eesure that the OpenAI library is correctly integrated by creating a test function that attempts to use the OpenAI API to create a simple chat completion or query.
+// Ensure that the OpenAI library is correctly integrated by creating a test function that attempts to use the OpenAI API to create a simple chat completion or query.
 
 // OpenAI Library Integration Test
 // Import necessary modules
 const { OpenAI } = require('openai');
-
-// Custom assertion function to compare actual and expected values
-function assertEqual(actual, expected, message) {
-  if (actual !== expected) {
-    throw new Error(`${message}: Expected ${expected}, but got ${actual}`);
-  }
-}
 
 // Test function to check OpenAI library integration
 function testOpenAIIntegration() {
@@ -71,6 +64,7 @@ function testOpenAIIntegration() {
     const openai = new OpenAI({ apiKey: 'OpenAI_API_Key_Here' });
 
     // Assert: Check if openai is an instance of OpenAI
+    console.log('Asserting OpenAI integration...');
     assertEqual(typeof openai, 'object', 'OpenAI type');
     assertEqual(openai instanceof OpenAI, true, 'OpenAI instance');
 
@@ -83,7 +77,4 @@ function testOpenAIIntegration() {
 // Call the test function
 testOpenAIIntegration();
 
-// ----------------------------------------------------------------------------------------------
-
-
-
+// --------------------------------------------------------------------------
